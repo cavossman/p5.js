@@ -1,32 +1,27 @@
 function Pipe() {
-  this.top = random(height/2);
-  this.bottom = random(height/2);
+  // bug - occasionally makes pipes with too small of a gapp to cross.
+  this.opening = random(height/2);
+  this.top = this.opening - 50;
+  this.bottom = this.opening + 50;
   this.x = width;
-  this.w = 20;
+  this.w = 40;
   this.speed = 2;
   
-  this.highlight = false;
-  
-  // Improve collisions.
   this.hits = function(bird) {
-    if (bird.y < this.top || bird.y > height - this.bottom) {
-      if (bird.x > this.x && bird.x < this.x + this.w){
-        this.highlight = true;
+    if (bird.y - bird.radius < this.top || bird.y + bird.radius > this.bottom) {
+      if (bird.x + bird.radius > this.x && bird.x + bird.radius < this.x + this.w){
         return true;
       }
     }
-    this.highlight = false;
     return false;
   }
   
   this.show = function() {
     fill(255);
-    if (this.highlight) {
-      fill(255, 0, 0);
-    }
     rect(this.x, 0, this.w, this.top); //update later. 11:00
-    rect(this.x, height - this.bottom, this.w, this.bottom); 
+    rect(this.x, this.bottom, this.w, height - this.bottom); 
   }
+  
   this.update = function() {
     this.x -= this.speed;
   }
